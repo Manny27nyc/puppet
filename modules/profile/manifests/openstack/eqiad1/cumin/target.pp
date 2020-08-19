@@ -42,6 +42,13 @@ class profile::openstack::eqiad1::cumin::target(
         content => template('profile/openstack/eqiad1/cumin/userkey.erb'),
     }
 
+    ssh::userkey { 'root-cloud-cumin':
+        ensure  => present,
+        user    => 'root',
+        skey    => 'cloud_cumin',
+        content => secret('keyholder/cloud-cumin_master.pub'),
+    }
+
     if $ssh_project_ferm_sources != '' {
         ::ferm::service { 'ssh-from-cumin-project-masters':
             proto  => 'tcp',
